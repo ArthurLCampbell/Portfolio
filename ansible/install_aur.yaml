@@ -1,0 +1,37 @@
+# Example from https://github.com/kewlfft/ansible-aur
+- hosts: localhost arch00_insight laptop00_insight
+
+  vars: 
+    aur_packages: 
+      - etc-update
+      - polybar
+      - brave-bin
+      - multimc5
+      - secure-delete
+      - aide
+      - dcfldd
+      - dxvk-bin
+      - librewolf-bin
+      - electronmail-bin
+      - tutanota-desktop-bin
+      - audacium-git
+      - timeshift
+      - multimc
+      - tiger
+      - mullvad-vpn-bin
+      - magic-wormhole
+      - cryptocoins-git
+      - paper-icon-theme
+      - pacolog
+      - guilded
+      - aucium-git
+
+  tasks:
+    - name: "Install aur packages"
+      become: yes
+      become_user: aur_builder
+      aur: 
+        name: "{{ item }}"
+        use: paru
+        state: present
+      with_items: "{{ aur_packages }}" 

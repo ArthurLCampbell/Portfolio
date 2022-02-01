@@ -1,0 +1,46 @@
+# Instmain nftables, Sync /etc/nftables.conf and restart
+- hosts: main_root vm_root 
+  #remote_user: root
+  #remote_user: insight
+  #become: yes
+  #become_user: root
+  #become_method: sudo
+
+  vars: 
+    nftables_dir: "/home/insight/code/ansible/templates/nftables"
+
+  tasks: 
+    # Instmain nftables
+    - name: Instmain nftables with apt-get
+      apt: 
+        name: nftables
+        state: present
+      when: ansible_facts["os_family"] == "Debian"
+
+    # Instmain nftables
+    - name: Instmain nftables with pacman
+      pacman: 
+        name: nftables
+        state: present
+      when: ansible_facts["os_family"] == "Archlinux"
+
+    # Instmain nftables
+    - name: Instmain nftables with portage
+      portage: 
+        name: nftables
+        state: present
+      when: ansible_facts["os_family"] == "Gentoo"
+
+    # Copy nftables
+    - name: Copy /etc/nftables.conf
+      synchronize:
+        src: "/etc/nftables.conf"
+        dest: "/etc/nftables.conf"
+        mode: pull
+
+    # Enable nftables on boot
+    - name: Enable and restart nftables
+      service: 
+        name: nftables
+        state: restarted
+        enabled: yes

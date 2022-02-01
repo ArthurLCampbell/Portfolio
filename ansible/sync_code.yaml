@@ -1,0 +1,39 @@
+# Instmain
+- hosts: main_root vm_root
+  #remote_user: insight
+  #become: yes
+  #become_user: root
+  #become_method: sudo
+
+  tasks:
+    # Instmain git Debian
+    - name: Install git (apt)
+      apt: 
+        name: git
+        state: present
+      when: ansible_facts["os_family"] == "Debian"
+
+    # Instmain git on ArchLinux
+    - name: Install git (pacman)
+      pacman: 
+        name: git
+        state: present
+      when: ansible_facts["os_family"] == "Archlinux"
+
+# Clone and pull
+- hosts: main
+  remote_user: insight
+
+  vars:
+    git_dir: "/home/insight/code"
+    git_branch: "code"
+    git_main: "smrti"
+
+  tasks: 
+    # clone
+    #- name: Cloning "{{ git_dir }}" from "{{ git_main }}"
+    #  shell: git clone "{{ git_main }}":"{{ git_dir }}"
+  
+    # pull
+    - name: Pulling "{{ git_branch }}" from "{{ git_dir }}" on "{{ git_main }}"
+      shell: cd "{{ git_dir }}" && git pull "{{ git_main }}":"{{ git_dir }}" "{{ git_branch }}"

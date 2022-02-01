@@ -1,0 +1,24 @@
+# Example from https://github.com/kewlfft/ansible-aur
+- hosts: localhost arch00_root arch01_root laptop00_root
+  # browse_root 
+
+  # Install trizen using makepkg, skip if it is already installed
+  #- aur: name=trizen use=makepkg state=present
+  #  become: yes
+  #  become_user: aur_builder
+
+  vars: 
+    aur_packages: 
+      - etc-update
+      - polybar
+      - brave-bin
+      - multimc5
+      - secure-delete
+      - arc-gtk-theme-git
+      - paper-icon-theme
+
+  tasks:
+    - aur: name={{ item }} use=makepkg state=absent
+      become: yes
+      become_user: aur_builder
+      with_items: "{{ aur_packages }}"

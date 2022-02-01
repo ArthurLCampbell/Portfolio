@@ -1,0 +1,11 @@
+# Update with arch hosts with paru
+- hosts: localhost laptop00_insight arch00_insight
+
+  tasks: 
+    - name: Updating hosts with paru
+      become: yes
+      become_user: aur_builder
+      # kewlfft.aur.aur:
+      aur:
+        use: paru
+        upgrade: yes

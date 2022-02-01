@@ -1,0 +1,26 @@
+# Add aur_builder user to use ansible-aur module
+- hosts: localhost arch00_root browse_root laptop00_root
+
+  tasks:
+    - name: add user_builder user
+      ansible.builtin.user:
+        user: aur_builder
+        create_home: yes
+        group: wheel
+        expires: -1
+
+    # Backup sudoers file (just in case)
+    - name: backing up sudoers
+      ansible.builtin.copy:
+        src: /etc/sudoers
+        dest: /etc/sudoers_backup
+
+    # append sudoers
+    - name: Appending sudoers
+      lineinfile: 
+        dest: /etc/sudoers
+        line: '{{ item }}'
+      with_items: 
+        - ' ' 
+        - '# Allow aur_builder access to pacman '
+        - 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'

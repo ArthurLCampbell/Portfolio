@@ -1,0 +1,336 @@
+# Install main base packages for new machines. 
+# - hosts: main_root vm_root localhost
+- hosts: arch00_root arch01_root browse_root laptop00_root
+  # remote_user: insight
+  # become: yes
+  # become_user: root
+  # become_method: sudo
+
+  vars: 
+    pacman_packages:
+      - bashtop
+      - htop
+      - tmux
+      - nmap
+      - bc
+      - iftop
+      - nethogs
+      - iotop
+      - mpd
+      - ncmpcpp
+      - mpv
+      - nmap
+      - feh
+      - rofi
+      - scrot
+      - neofetch
+      - git
+      - python-pexpect
+      - flatpak
+      - speedtest-cli
+      - syslog-ng
+      - cronie
+      - python-pylint
+      - rsync
+      - gnupg
+      - tar
+      - pigz
+      - neovim
+      - emacs
+      - ripgrep
+      - fd
+      - inetutils
+      - sshfs
+      - cockpit
+      - packagekit
+      - i3-gaps
+      - xfce4
+      - xfce4-goodies
+      - plasma
+      - ttf-fonts-awesome
+      - xscreensaver
+      - dunst
+      - kitty
+      - pulseaudio
+      - pulsemixer
+
+    apt_packages:
+      - bashtop
+      - htop
+      - tmux
+      - nmap
+      - bc 
+      - iftop
+      - nethogs
+      - iotop
+      - mpd
+      - ncmpcpp
+      - mpv
+      - nmap
+      - feh
+      - rofi
+      - scrot
+      - neofetch
+      - git
+      - python3-pexpect
+      - python3-bs4
+      - flatpak
+      - speedtest-cli
+      - syslog-ng
+      - pylint
+      - rsync
+      - gnupg
+      - tar
+      - pigz
+      - neovim
+      - emacs
+      - ripgrep
+      - fd-find
+      - apt-listbugs
+      - sshfs
+      - needrestart
+      - cockpit
+      - packagekit
+      - i3-gaps
+      - ttf-fonts-awesome
+      - xscreensaver
+      - dunst
+      - kitty
+      - xdotool
+      - maim
+      - pulseaudio
+      - pulsemixer
+
+    portage_packages:
+      - bashtop
+      - htop
+      - tmux
+      - nmap
+      - bc 
+      - iftop
+      - nethogs
+      - iotop
+      - mpd
+      - ncmpcpp
+      - mpv
+      - nmap
+      - feh
+      - rofi
+      - scrot
+      - neofetch
+      - git
+      - python3-pexpect
+      - python3-bs4
+      - flatpak
+      - speedtest-cli
+      - syslog-ng
+      - pylint3
+      - rsync
+      - gnupg
+      - tar
+      - pigz
+      - neovim
+      - emacs
+      - ripgrep
+      - sshfs
+      - fd-find
+      - cockpit
+      - packagekit
+      - i3-gaps
+      - ttf-fonts-awesome
+      - xscreensaver
+      - dunst
+      - kitty
+      - xdotool
+      - maim
+      - pulseaudio
+      - pulsemixer
+
+    dnf_packages:
+      - bashtop
+      - htop
+      - tmux
+      - nmap
+      - bc 
+      - iftop
+      - nethogs
+      - iotop
+      - mpd
+      - ncmpcpp
+      - mpv
+      - nmap
+      - feh
+      - rofi
+      - scrot
+      - neofetch
+      - git
+      - python3-pexpect
+      - python3-bs4
+      - flatpak
+      - speedtest-cli
+      - syslog-ng
+      - pylint3
+      - rsync
+      - gnupg
+      - tar
+      - pigz
+      - neovim
+      - emacs
+      - ripgrep
+      - sshfs
+      - fd-find
+      - cockpit
+      - packagekit
+      - i3-gaps
+      - ttf-fonts-awesome
+      - xscreensaver
+      - dunst
+      - kitty
+      - xdotool
+      - maim
+      - pulseaudio
+      - pulsemixer
+
+    openbsd_packages:
+      - bashtop
+      - htop
+      - tmux
+      - nmap
+      - bc 
+      - iftop
+      - nethogs
+      - iotop
+      - mpd
+      - ncmpcpp
+      - mpv
+      - nmap
+      - feh
+      - rofi
+      - scrot
+      - neofetch
+      - git
+      - python3-pexpect
+      - python3-bs4
+      - flatpak
+      - speedtest-cli
+      - syslog-ng
+      - pylint3
+      - rsync
+      - gnupg
+      - tar
+      - sshfs
+      - pigz
+      - neovim
+      - cockpit
+      - packagekit
+      - i3-gaps
+      - ttf-fonts-awesome
+      - xscreensaver
+      - dunst
+      - kitty
+      - xdotool
+      - maim
+      - pulseaudio
+      - pulsemixer
+
+    aur_packages:   
+      - polybar
+
+    # Services to enable
+    services:
+      - syslog-ng
+      - cronie
+
+    # Configs to copy over
+    configs:
+      # Copy wm configs
+      - { "src": "/home/insight/.config/i3", "dest":"/hom/insight/.config", "owner": "insight", "group": "insight" }
+      - { "src": "/home/insight/.config/i3", "dest":"/hom/insight/.config", "owner": "insight", "group": "insight" }
+      - { "src": "/home/insight/.config/polybar", "dest":"/hom/insight/.config", "owner": "insight", "group": "insight" }
+      - { "src": "/home/insight/.config/kitty", "dest":"/hom/insight/.config" , "owner": "insight", "group": "insight" }
+      - { "src": "/home/insight/.config/nvim", "dest":"/hom/insight/.config" , "owner": "insight", "group": "insight" }
+
+      # Copy shell files
+      - { "src": "/home/insight/.tmux.conf", "dest":"/hom/insight", "owner": "insight", "group": "insight" }
+      - { "src": "/home/insight/.zsh", "dest":"/hom/insight", "owner": "insight", "group": "insight" }
+      - { "src": "/home/insight/.zsh", "dest":"/hom/insight", "owner": "insight", "group": "insight" }
+
+  # Instmain packages
+  tasks:
+    # Copy files
+    # - name: Copying tmux.conf
+    #  src: /home/insight/.tmux.conf
+    #  dest: /home/insight/.tmux.conf
+
+    # Pacman
+    - name: Install packages with pacman
+      #debug: var=pacman_packages
+      pacman:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ pacman_packages }}"
+      when: ansible_facts["os_family"] == "Archlinux"
+
+    # apt-get
+    - name: Instmain package with apt-get
+      #debug: var=apt_packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ apt_packages }}"
+      when: ansible_facts["os_family"] == "Debian" 
+
+    # portage
+    - name: Install main packages with portage
+      portage:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ portage_packages }}" 
+      when: ansible_facts["os_family"] == "Gentoo" 
+
+    # dnf
+    - name: Instmain package with dnf
+      #debug: var=dnf_packages
+      dnf:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ dnf_packages }}"
+      when: ansible_facts["os_family"] == "RedHat" 
+
+    # OpenBSD
+    - name: Instmain package with openbsd_pkg
+      #debug: var=openbsd_packages
+      openbsd_pkg:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ openbsd_packages }}"
+      when: ansible_facts["os_family"] == "OpenBSD"
+
+    # AUR
+    - name: Installing packages through aur
+      become_user: aur_builder
+      become: yes
+      aur: 
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ aur_packages }}"
+      when: ansible_facts["os_family"] == "ArchLinux"
+
+    # Copy configs
+    - name: Copy configs
+      #debug: var=configs
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+      with_items: "{{ configs }}"
+
+    # Enable services
+    - name: Enable services
+      #debug: var=services
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      with_items: "{{ services }}"  

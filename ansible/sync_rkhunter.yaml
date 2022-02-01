@@ -1,0 +1,34 @@
+# copy rkhunter and update
+- hosts: main_root vm_root
+  #remote_user: insight
+  #become_method: sudo
+  #become: yes
+
+  vars: 
+    rkhunter_dir: "/home/insight/code/ansible/templates/rkhunter"
+
+  tasks:
+    # Instmain rkhunter
+    - name: Checking for rkhunter (Debian)
+      apt: 
+        name: rkhunter
+        state: present
+      when: ansible_facts["os_family"] == "Debian"
+
+    # Instmain rkhunter
+    - name: Checking for rkhunter (Arch)
+      pacman: 
+        name: rkhunter
+        state: present
+      when: ansible_facts["os_family"] == "Archlinux"
+
+    # Copy /etc/rkhunter.conf config.
+    #- name: "Copy {{ rkhunter_dir }}/rkhunter.conf"
+    #  synchronize: 
+    #    src: "{{ rkhunter_dir }}/rkhunter.conf"
+    #    dest: /etc/rkhunter.conf
+    #    mode: pull
+
+    # Update rkhunter
+    - name: Update rkhunter
+      shell: rkhunter --configfile /etc/rkhunter.conf --update

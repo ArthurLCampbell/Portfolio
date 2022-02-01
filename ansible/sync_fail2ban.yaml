@@ -1,0 +1,38 @@
+# Sync fail2ban settings
+- hosts: main_root vm_root
+  #remote_user: insight
+  #become_method: sudo
+  #become: yes
+
+  vars: 
+    fail2ban_dir: "/home/insight/code/ansible/templates/fail2ban"
+
+  tasks:
+    # Instmain fail2ban on apt
+    - name: Installing fail2ban (Apt)
+      apt:
+        name: 
+          - fail2ban
+        state: present
+      when: ansible_facts["os_family"] == "Debian"
+
+    # Instmain fail2ban on arch
+    - name: Installing fail2ban (Arch)
+      pacman:
+        name:
+          - fail2ban
+        state: present
+      when: ansible_facts["os_family"] == "Archlinux"
+
+    # Copy jail.local to configure fail2ban
+    - name: "Copying {{ fail2ban_dir }}"
+      synchronize: 
+        src: "{{ fail2ban_dir }}/jail.local"
+        dest: /etc/fail2ban/jail.local
+
+    # Restart fail2ban
+    - name: Restarting fail2ban
+      service: 
+        name: fail2ban
+        state: started
+        enabled: yes

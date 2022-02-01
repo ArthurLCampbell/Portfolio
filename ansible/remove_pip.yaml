@@ -1,0 +1,13 @@
+# Root pip
+- hosts: localhost main_insight vm_insight
+  #remote_user: insight
+
+  # Update main machines
+  tasks:
+      # Pip
+      - name: Running pip
+        shell: pip uninstall maestral maestral-qt
+
+      # Pip3
+      - name: Running pip3
+        shell: pip3 uninstall maestral maestral-qt

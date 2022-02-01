@@ -1,0 +1,10 @@
+# Playbook to reboot
+- hosts: main_root vm_root production_root
+  #remote_user: insight
+  #become_user: root
+  #become_method: sudo
+  #become: yes
+
+  tasks: 
+      - name: Restarting
+        shell: reboot

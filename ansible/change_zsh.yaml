@@ -1,0 +1,22 @@
+# copy zsh, modify zsh
+- hosts: main_root vm_root
+  #remote_user: insight
+  #become_user: root
+  #method: sudo
+
+  tasks: 
+    # Copy .zshrc file
+    - name: Copy .zshrc file
+      copy: 
+        src: /home/insight/.zshrc
+        dest: /home/insight/.zshrc
+    
+    # Copy .zsh file
+    - name: Copy .zsh folder
+      copy: 
+        src: /home/insight/.zsh
+        dest: /home/insight/.zsh
+
+    # Change shell to user.
+    - name: Change shell to zsh
+      shell: /usr/sbin/usermod insight -s /usr/bin/zsh 

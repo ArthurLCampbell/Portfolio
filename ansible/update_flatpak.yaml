@@ -1,0 +1,7 @@
+# update user flatpak
+- hosts: localhost main_insight vm_insight work_insight production_insight
+
+  # Update flatpak
+  tasks:
+      - name: Updating flatpak
+        shell: flatpak update -y

@@ -1,0 +1,20 @@
+[DEFAULT]
+# Default ban time.
+bantime = 1d
+
+banaction = nftables
+banaction_allports = nftables[type=allports]
+
+# Email
+#destemail = yourname@example.com
+#sender = yourname@example.com
+
+# to ban & send an e-mail with whois report to the destemail.
+#action = %(action_mw)s
+
+# same as action_mw but also send relevant log lines
+#action = %(action_mwl)s
+
+# Enable jails
+[sshd]
+enabled = true

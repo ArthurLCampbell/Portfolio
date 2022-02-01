@@ -1,0 +1,19 @@
+# Install apt and apt-file
+- hosts: all
+  remote_user: insight
+  become_user: root
+  become_method: sudo
+  become: yes
+
+  tasks: 
+    - name: Check for apt and apt-file
+      apt:
+        name: 
+          - apt
+          - apt-file
+        state: present
+      when: ansible_facts["os_family"] == "Debian"
+
+    - name: Update with apt-file
+      shell: apt-file update
+      when: ansible_facts["os_family"] == "Debian"

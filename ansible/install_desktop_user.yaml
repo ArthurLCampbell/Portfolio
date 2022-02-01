@@ -1,0 +1,125 @@
+# Install main base packages for new machines. 
+- hosts: browse_root
+  # remote_user: insight
+  # become: yes
+  # become_user: root
+  # become_method: sudo
+
+  vars: 
+    pacman_packages:
+      - bashtop
+      - htop
+      - tmux
+      - nmap
+      - bc
+      - iftop
+      - nethogs
+      - iotop
+      - mpd
+      - ncmpcpp
+      - mpv
+      - nmap
+      - feh
+      - rofi
+      - scrot
+      - neofetch
+      - git
+      - python-pexpect
+      - flatpak
+      - speedtest-cli
+      - syslog-ng
+      - cronie
+      - python-pylint
+      - rsync
+      - gnupg
+      - tar
+      - pigz
+      - neovim
+      - emacs
+      - ripgrep
+      - fd
+      - inetutils
+      - sshfs
+      - cockpit
+      - packagekit
+      - i3-gaps
+      - ttf-font-awesome
+      - xscreensaver
+      - dunst
+      - kitty
+      - pulseaudio
+      - pulsemixer
+      - xfce4
+      - xfce4-goodies
+
+    aur_packages:   
+      - polybar
+
+    # Services to enable
+    services:
+      - syslog-ng@default
+      - cronie
+
+    configs_user:
+      # Copy wm configs
+      - { "src": "/home/insight/.config/i3", "dest":"/hom/user/.config", "owner": "user", "group": "user" }
+      - { "src": "/home/insight/.config/i3", "dest":"/hom/user/.config", "owner": "user", "group": "user" }
+      - { "src": "/home/insight/.config/polybar", "dest":"/hom/user/.config", "owner": "user", "group": "user" }
+      - { "src": "/home/insight/.config/kitty", "dest":"/hom/user/.config" , "owner": "user", "group": "user" }
+      - { "src": "/home/insight/.config/nvim", "dest":"/hom/user/.config" , "owner": "user", "group": "user" }
+
+      # Copy shell files
+      - { "src": "/home/insight/.tmux.conf", "dest":"/hom/user", "owner": "user", "group": "user" }
+      - { "src": "/home/insight/.zsh", "dest":"/hom/user", "owner": "user", "group": "user" }
+      - { "src": "/home/insight/.zsh", "dest":"/hom/user", "owner": "user", "group": "user" }
+
+  # Instmain packages
+  tasks:
+    # Copy files
+    # - name: Copying tmux.conf
+    #  src: /home/insight/.tmux.conf
+    #  dest: /home/insight/.tmux.conf
+
+    # Pacman
+    - name: Install packages with pacman
+      #debug: var=pacman_packages
+      pacman:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ pacman_packages }}"
+      when: ansible_facts["os_family"] == "Archlinux"
+
+    # Enable services
+    - name: Enable services
+      #debug: var=services
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      with_items: "{{ services }}"
+
+    # AUR
+    - name: Installing packages through aur
+      #debug: var=aur_packages
+      become_user: aur_builder
+      become: yes
+      aur: 
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ aur_packages }}"
+      when: ansible_facts["os_family"] == "ArchLinux"
+
+    # Copy configs
+    - name: Copy configs
+      #debug: var=configs
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+      with_items: "{{ configs_user }}"
+
+    # Update configs
+    #- name: Updating configs
+    #  shell: find "{{ item }}" -iname "*" -type f
+    #  with_items: "{{ configs_user }}" 

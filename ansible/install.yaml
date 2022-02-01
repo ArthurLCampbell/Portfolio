@@ -1,0 +1,48 @@
+# === install main packages === 
+- hosts: main_root vm_root localhost
+
+  vars:
+    packages: 
+      - python-pip
+
+  # Install main packages
+  tasks:
+  # apt-get
+  - name: Installing packages with apt-get
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ packages }}"
+    when: ansible_facts["os_family"] == "Debian" 
+
+  # Pacman
+  - name: Installing packages with pacman
+    pacman:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ packages }}"
+    when: ansible_facts["os_family"] == "Archlinux" 
+
+  # Dnf
+  - name: Installing packages with pacman
+    dnf:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ packages }}"
+    when: ansible_facts["os_family"] == "RedHat" 
+
+  # Gentoo
+  - name: Installing packages with Portage
+    portage:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ packages }}"
+    when: ansible_facts["os_family"] == "Gentoo"
+
+  # OpenBSD
+  - name: Installing packages with openbsd_pkg
+    openbsd_pkg:
+      name: "{{ item }"
+      state: present
+    with_items: "{{ packages }}"
+    when: ansible_facts["os_family"] == "OpenBSD"

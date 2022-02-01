@@ -1,0 +1,29 @@
+# Run sync_root on every machine.
+
+# Check for $HOME/code/bin or $HOME/bin versions of the script before running.
+- hosts: localhost main_insight vm_insight
+  become_user: yes
+  become_method: sudo
+
+  vars: 
+    sync_code_file: "/home/insight/code/bin/sync_root"
+    sync_root_file: "/home/insight/bin/sync_root"
+
+  tasks:
+    - name: check if /home/insight/code/bin/sync_root exists
+      stat: 
+        path: /home/insight/code/bin/sync_root
+      register: sync_root_code
+
+    - name: check if /home/insight/bin/sync_root exists
+      stat: 
+        path: /home/insight/bin/sync_root
+      register: sync_root_home
+
+    - name: running /home/insight/code/bin/./sync_root
+      shell: /home/insight/code/bin/./sync_root
+      when: sync_root_code.stat.exists
+
+    - name: running /home/insight/bin/./sync_root
+      shell: /home/insight/bin/./sync_root
+      when: sync_root_home.stat.exists

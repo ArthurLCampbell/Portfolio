@@ -1,0 +1,19 @@
+# Configure fail2ban for netbooks
+- hosts: main_root vm_root
+
+  vars: 
+    logind_dir: "/home/insight/code/ansible/netbooks/templates/systemd"
+
+  tasks:
+    # Copy jail.local to configure systemd-logind
+    - name: Syncing "{{ logind_dir }}"
+      synchronize: 
+        src: "{{ logind_dir }}/logind.conf"
+        dest: /etc/systemd/logind.conf
+
+    # Restart systemd-logind
+    - name: Restarting systemd-logind
+      service: 
+        name: systemd-logind
+        state: restarted
+        enabled: yes

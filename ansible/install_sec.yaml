@@ -1,0 +1,78 @@
+# Example from https://github.com/kewlfft/ansible-aur
+- hosts: localhost arch00_root arch01_root laptop00_root
+  # browse_root 
+
+  # Install trizen using makepkg, skip if it is already installed
+  #- aur: name=trizen use=makepkg state=present
+  #  become: yes
+  #  become_user: aur_builder
+
+  vars:
+    packages:
+      - curl
+      - wget
+      - rkhunter
+      - clamav
+      - lynis
+
+    aur_packages:
+      - aide
+
+    configs:
+      - { src:"/etc/aide.conf", dest:"/etc/aide.conf", owner:"root", group:"root"}
+      - { src:"/etc/rkhunter.con", dest:"/etc/rkhunter.conf", owner:"root", group:"root"}
+
+  tasks:
+    # Install packages
+    - name: (pacman) Install security packages
+      #debug: "{{ packages }}"
+      pacman: 
+        name: "{{ item }}" 
+        state: present
+      with_items: "{{ packages }}"
+      when: ansible_facts["os_family"] == "ArchLinux"
+
+    - name: Install (AUR) security packages
+      #debug: "{{ aur_packages }}"
+      aur: name={{ item }} use=makepkg state=present
+      become: yes
+      become_user: aur_builder
+      with_items: "{{ aur_packages }}"
+      when: ansible_facts["os_family"] == "Archlinux" 
+
+    - name: (apt) Install security packages
+      #debug: "{{ packages }}"
+      apt: 
+        name: "{{ item }}" 
+        state: present
+      with_items: "{{ packages }}"
+      when: ansible_facts["os_family"] == "Ubuntu"
+
+    # Copy working configs from main
+    - name: Copying configs
+      #debug: var=configs
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+      with_items: "{{ configs }}"
+
+    # Update rkhunter
+    - name: Updating rkhunter
+      shell: rkhunter --update
+
+    # Update rkhunter db
+    - name: Updating rkhunter DB
+      shell: rkhunter --propupdate
+
+    # Enable aide
+    - name: Initializing Aide database
+      shell: aide --init
+
+    # Enable clamav
+    - name: Starting clamav
+      service: 
+        name: clamvav-freshclam
+        state: started
+        enabled: yes

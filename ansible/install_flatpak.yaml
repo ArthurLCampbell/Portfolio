@@ -1,0 +1,35 @@
+# Install flatpak to system.
+- hosts: localhost main_root vm_root
+
+  tasks:
+    # Install with apt and pacman
+    - name: Installing flatpak (apt)
+      apt: 
+        name: flatpak
+        state: present
+      when: ansible_facts["os_family"] == "Debian" or
+            ansible_facts["os_family"] == "Peppermint" or
+            ansible_facts["os_family"] == "Ubuntu"
+
+    - name: Installing flatpak (portage)
+      portage: 
+        name: flatpak
+        state: present
+      when: ansible_facts["os_family"] == "Gentoo"
+
+    - name: Installing flatpak (pacman)
+      pacman: 
+        name: flatpak
+        state: present
+      when: ansible_facts["os_family"] == "Archlinux"
+
+# Install to user
+- hosts: main_insight vm_insight localhost
+  remote_user: insight
+  become: yes
+  become_method: su
+
+  tasks:
+    # Add flathub repo
+    - name: Adding flathub repo
+      shell: flatpak --user remote-add flathub "https://flathub.org/repo/flathub.flatpakrepo"

@@ -1,0 +1,13 @@
+# === Sync git projects under /home/insight/Downloads/git
+# main 
+- hosts: localhost main_insight vm_insight
+
+  # Set variables
+  vars:
+      code_bin: "/home/insight/code/bin"
+
+  # Update main machines
+  tasks:
+      # Update git
+      - name: "Update git with update_git in {{ code_bin }}"
+        shell: "{{ code_bin }}/update_git.sh -d /home/insight/Documents/git"

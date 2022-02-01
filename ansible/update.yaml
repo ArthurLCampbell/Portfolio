@@ -1,0 +1,80 @@
+## === general packages ===
+#- hosts: localhost main vm
+#  remote_user: insight
+#
+#  # Update main machines
+#  tasks:
+#      # Pip
+#      - name: Running pip
+#        shell: pip install --upgrade --user youtube-dl gallery-dl
+ 
+# main
+- hosts: localhost main_root vm_root production_root
+  #remote_user: root
+  #become: yes
+  #become_user: root
+  #become_method: sudo
+
+  # Update main machines
+  tasks:
+      # yay
+      #- name: Running yay
+      #  aur:
+      #  become: yes
+      #  become_user: aur_builder
+      #      update_cache: yes
+      #      upgrade: yes
+      #  when: ansible_facts["os_family"] == "Archlinux"
+
+      # aur
+      - name: Updating machines with pacman
+        pacman:
+            update_cache: yes
+            upgrade: yes
+        when: ansible_facts["os_family"] == "Archlinux"
+      # Pacman
+      - name: Updating machines with pacman
+        pacman:
+            update_cache: yes
+            upgrade: yes
+        when: ansible_facts["os_family"] == "Archlinux"
+
+      # apt-get
+      - name: Updating machines with apt
+        apt: 
+            update_cache: yes
+            upgrade: yes
+            autoclean: yes
+            autoremove: yes
+        when: ansible_facts["os_family"] == "Debian" or 
+              ansible_facts["os_family"] == "Peppermint" or
+              ansible_facts["os_family"] == "Mint"
+
+      # Gentoo
+      - name: Updating machines with portage
+        portage:
+            package: '@world'
+            update: yes
+            deep: yes
+            sync: yes
+        when: ansible_facts["os_family"] == "Gentoo"
+
+      # Fedora
+      - name: Updating machines with dnf
+        dnf: 
+            name: "*"
+            state: latest
+        when: ansible_facts["os_family"] == "RedHat"
+
+      # OpenBSD
+      - name: Updating machines with openbsd_pkg
+        openbsd_pkg: 
+           name: '*'
+           state: latest
+        when: ansible_facts["os_family"] == "OpenBSD"
+
+      #- name: Update through AUR
+      #  # Update packages with AUR using aur_builder user
+      #  # Upgrade the system using yay, only act on AUR packages.
+      #  # Note: Dependency resolving will still include repository packages.
+      #  - aur: upgrade=yes use=paru aur_only=yes

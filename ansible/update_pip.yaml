@@ -1,0 +1,27 @@
+# Root pip
+- hosts: localhost main_insight vm_insight production_insight
+
+  vars:
+#    pip_packages:
+#      - pip
+#      - pip-review
+#      - wheel
+#      - youtube-dl
+#      - yt-dlp
+#      - gallery-dl
+#      - requests_html
+
+  # Update main machines
+  tasks:
+#      # Pip
+#      - name: Running pip
+#        shell: pip install --upgrade --user "{{ item }}"
+#        with_items: "{{ pip_packages }}"
+#
+      # Install pip and pip-review
+      - name: Updating pip and pip-review
+        shell: pip install --user --upgrade pip pip-review
+
+      # Update pip with pip-review
+      - name: Running pip-review
+        shell: /home/insight/.local/bin/pip-review -a --user --upgrade

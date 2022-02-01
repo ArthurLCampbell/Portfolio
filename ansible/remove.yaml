@@ -1,0 +1,41 @@
+# === Remove package === 
+# main
+- hosts: localhost main_root vm_root
+  #remote_user: insight
+  #become: yes
+  #become_user: root
+  #become_method: sudo
+
+  # Instmain packages
+  tasks:
+      # apt-get
+      - name: Remove packages from Debian machines
+        apt:
+            name:
+                - firefox
+            state: absent
+        when: ansible_facts["os_family"] == "Debian" 
+
+      # Pacman
+      - name: Remove packages from Arch machines
+        pacman: 
+            name:
+                - firefox
+            state: absent
+        when: ansible_facts["os_family"] == "Archlinux" 
+      
+      # Pacman
+      - name: Remove packages from Gentoo machines 
+        portage: 
+            name:
+                - firefox
+            state: absent
+        when: ansible_facts["os_family"] == "Gentoo"
+
+      # OpenBSD
+      - name: Remove packages from OpenBSD machines
+        pacman: 
+            name:
+                - firefox
+            state: absent
+            when: ansible_facts["os_family"] == "OpenBSD"

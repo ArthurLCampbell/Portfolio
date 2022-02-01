@@ -1,0 +1,11 @@
+# Update aide on all machines
+- hosts: localhost all
+  become_user: insight
+
+  # Update all machines
+  tasks:
+      - name: Print out uptime
+        register: ps
+        shell: uptime
+
+      - debug: var=ps.stdout_lines

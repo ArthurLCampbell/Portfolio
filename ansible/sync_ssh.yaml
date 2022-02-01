@@ -1,0 +1,37 @@
+# Instmain nftables, Sync /etc/nftables.conf and restart
+- hosts: main_root vm_root
+  # remote_user: insight
+  # become: yes
+  # become_user: root
+  # become_method: sudo
+
+  # Define vars
+  # vars:
+  #  ssh_dir: "/home/insight/code/ansible/templates/ssh"
+
+  tasks:
+    # Copy sshd_config_debian for debian
+    - name: Coping "/etc/ssh/sshd_config"
+      copy:
+        src: "/etc/ssh/sshd_config"
+        dest: /etc/ssh/sshd_config
+        owner: root
+        group: root
+        mode: 755
+
+    # Enabled ssh on boot for Debian
+    - name: Enable and restart ssh
+      service:
+        name: ssh
+        state: restarted
+        enabled: true
+      when: ansible_facts["os_family"] == "Debian"
+
+    # Enable sshd for arch linux
+    - name: Enable and restart sshd
+      service:
+        name: sshd
+        state: restarted
+        enabled: true
+      when: ansible_facts["os_family"] == "Archlinux" or
+            ansible_facts["os_family"] == "Gentoo"
