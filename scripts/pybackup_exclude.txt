@@ -1,0 +1,11 @@
+# Pybackup exclude file
+/dev/*
+/proc/*
+/sys/*
+/tmp/*
+/run/*
+/mnt/*
+/media/*
+/lost+found
+insight/.local/share/baloo/
+insight/nab/gallery-dl
